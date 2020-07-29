@@ -1,0 +1,10 @@
+
+http://localhost:9999/employee
+
+
+http://localhost:9999/create-profile
+
+
+http://localhost:9999/create-job
+
+
