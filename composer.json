@@ -17,7 +17,8 @@
     "ext-curl": "*",
     "elementaryframework/events": "^0.0.1",
     "elementaryframework/streams": "^0.0.2",
-    "fzaninotto/faker": "^1.9"
+    "fzaninotto/faker": "^1.9",
+    "vlucas/phpdotenv": "^5.1"
   },
   "keywords": [
     "url",

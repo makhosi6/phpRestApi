@@ -1,5 +1,5 @@
-function interfaceDb($sql_query, $method, $id)
-{
+<?php
+function interfaceDb($sql_query, $method, $id){
     //if method = insert = 100
     //if method = select = 10
     try {
@@ -51,4 +51,8 @@ function randKey($length = 16){
         }
     }
     return $newstring;
-}
+};
+function cors(){
+    header("Access-Control-Allow-Origin: *");
+    header("Access-Control-Allow-Headers: *");
+};
