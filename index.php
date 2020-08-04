@@ -10,11 +10,11 @@ use ElementaryFramework\WaterPipe\HTTP\Response\Response;
 // Require the Response class
 use ElementaryFramework\WaterPipe\WaterPipe;
 
+
 // Create the base pipe
 $basePipe = new WaterPipe;
 //
-function interfaceDb($sql_query, $method, $id)
-{
+function interfaceDb($sql_query, $method, $id){
     //if method = insert = 100
     //if method = select = 10
     try {
@@ -22,7 +22,7 @@ function interfaceDb($sql_query, $method, $id)
         $username = "root";
         $password = "";
         $dbname = "jobs_app";
-// 
+    // 
         $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
         $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         /// use exec() because no results are returned
@@ -66,53 +66,69 @@ function randKey($length = 16){
         }
     }
     return $newstring;
-}
+};
 //get a specific employee
 $basePipe->get("/get-employee", function (Request $req, Response $res) {
-
     $params = $req->getParams();
-    // $param1 = $params["name"];
+    $paramid = $params["id"];
+    header("Access-Control-Allow-Origin: *");
+    header("Access-Control-Allow-Headers: *");
     //
     $servername = "localhost";
     $username = "root";
     $password = "";
     $dbname = "jobs_app";
+   
+    $sql_id = "SELECT * FROM employee WHERE employee_id='{$paramid}'";
+    $sql_o = "SELECT * FROM employee";
     //
-    $sql = "SELECT * FROM employee";
-    //
-    $id = "MDbuAPQ8btk01kU0";
-    $res->sendJson(interfaceDb($sql, 10,$id));
+    $sql = (isset($paramid)) ? $sql_id : $sql_o;
+// echo $sql;
+    $res->sendJson(interfaceDb($sql, 10,0));
 
 });
 //jobs
 $basePipe->get("/get-jobs", function (Request $req, Response $res) {
+    header("Access-Control-Allow-Origin: *");
+    header("Access-Control-Allow-Headers: *");
     $params = $req->getParams();
-    // $param1 = $params["name"];
+    $paramId = $params["id"];
     //
-    $servername = "localhost";
-    $username = "root";
-    $password = "";
-    $dbname = "jobs_app";
+    $sql_id = "SELECT * FROM jobs WHERE job_id={$paramId}";
+    $sql_o = "SELECT * FROM jobs";
     //
-    $sql = "SELECT * FROM jobs";
-    //
-    $id = "MDbuAPQ8btk01kU0"; 
+    $sql = (isset($paramid)) ? $sql_id : $sql_o;
+    //J5d0puTPA4cmgSmw
+
     $res->sendJson(interfaceDb($sql, 10,0));
+});
+$basePipe->get("/applicants", function (Request $req, Response $res) {
+    header("Access-Control-Allow-Origin: *");
+    header("Access-Control-Allow-Headers: *");
+    $params = $req->getParams();
+    $paramId = $params["id"];
+    $sql = "SELECT * FROM applied_jobs WHERE employer_id='{$paramId}'";
+    $res->sendJson(interfaceDb($sql, 10,0));
+
 });
 //get a specific employer >>
 $basePipe->get("/get-employer", function (Request $req, Response $res) {
     $params = $req->getParams();
-    // $param1 = $params["name"];
+    $paramid = $params["id"];
+    header("Access-Control-Allow-Origin: *");
+    header("Access-Control-Allow-Headers: *");
     //
     $servername = "localhost";
     $username = "root";
     $password = "";
     $dbname = "jobs_app";
     //
-    $sql = "SELECT * FROM employer";
+    $sql_o = "SELECT * FROM employer";
+    $sql_id = "SELECT * FROM employer WHERE employer_id='{$paramid}'";
     //
-    $id = "5QsJlKEEqh6MWBZR";
-    $res->sendJson(interfaceDb($sql, 10,$id));
+    $sql = (isset($paramid)) ? $sql_id : $sql_o;
+//
+    $res->sendJson(interfaceDb($sql, 10,0));
 
 });
 //create-job >>
@@ -140,11 +156,13 @@ $basePipe->post("/create-profile", function (Request $req, Response $res){
     VALUES ('{$id}','{$name}', '{$email}', '{$co_name}')";
     //
     interfaceDb($sql, 100, "");
-
 });
 //seeker profile >>
 $basePipe->post("/employee", function (Request $req, Response $res) {
     $body = $req->getBody();
+    //
+    header("Access-Control-Allow-Origin: *");
+    header("Access-Control-Allow-Headers: *");
     //
     $id = randKey();
     $name = $body["name"];
@@ -154,13 +172,12 @@ $basePipe->post("/employee", function (Request $req, Response $res) {
     //
     $sql = "INSERT INTO employee (employee_id,employee_name, email, occupation, bio)
         VALUES ('{$id}','{$name}', '{$email}', '{$occupation}', '{$bio}')";
-
     interfaceDb($sql, 100, "");
 });
 //applly
-$basePipe->post("/job-application", function (Request $req, Response $res) {
+$basePipe->post("/apply", function (Request $req, Response $res) {
     $body = $req->getBody();
-//
+    //
     $employer_id = $body['employer_id'];
     $job_id = $body['job_id'];
     $employee_id = $body['employee_id'];
@@ -169,5 +186,6 @@ $basePipe->post("/job-application", function (Request $req, Response $res) {
     interfaceDb($sql,100,0);
 
 });
+
 
 $basePipe->run();
