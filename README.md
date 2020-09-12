@@ -1,1 +1,1 @@
-"# phpRestApi - Feel free to look around" 
+A minimalistic REST API built in PHP. I noticed that nodejs is the go to language to build a simple API. So i built this API as a way of finding out if PHP can be a great tool of bootstrapping a API. This project is built on top of [WaterPipe](https://github.com/ElementaryFramework/WaterPipe), a routing framework and request and reponse handler for PHP.
