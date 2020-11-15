@@ -1,10 +1,27 @@
+GET http://localhost:9090/user
+GET http://localhost:9090/user?id=wateva
+POST http://localhost:9090/user/
+POST http://localhost:9090/user/edit?id=wateva
+PUT/PATCH http://localhost:9090/user?id=wateva
 
-http://localhost:9999/employee
+GET http://localhost:9090/jobs/
+GET http://localhost:9090/jobs?id=wateva
+POST http://localhost:9090/jobs
+POST http://localhost:9090/jobs/apply?id=wateva 
+PUT/PATCH http://localhost:9090/jobs/?id=wateva
+DELETE http://localhost:9090/jobs/?id=wateva
 
 
-http://localhost:9999/create-profile
+
+VIA post->body
+    get->params
 
 
-http://localhost:9999/create-job
+DIVIDE ENTITIES (user, jobs)
 
 
+id
+created_at
+modified_at
+admin_id [foreign key at applications]  as employer
+user_id [foreign key at applications] as employee

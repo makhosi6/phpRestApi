@@ -1,12 +1,16 @@
 <?php
-function interfaceDb($sql_query, $method, $id){
-    //if method = insert = 100
-    //if method = select = 10
+/**
+     *Methods.
+     *
+     * @param method => insert = 100
+     * @param method => select = 10
+     */
+function interfaceDb($sql_query, $method){
     try {
-        $servername = "localhost";
-        $username = "root";
-        $password = "";
-        $dbname = "jobs_app";
+        $servername = getenv('SERVE');
+        $username = getenv('USERNAME');
+        $password = getenv('PASSWORD');
+        $dbname = getenv('DB');
     // 
         $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
         $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -15,12 +19,12 @@ function interfaceDb($sql_query, $method, $id){
             $conn->exec($sql_query);
             echo "Success!!! @ " . date("H:i:s");
         } elseif ($method === 10) {
-            if ($id !== 0) {
-                $st = $conn->prepare($sql_query);
-                $st->execute([$id]);
-            } elseif ($id === 0) {
+            // if ($id !== 0) {
+            //     $st = $conn->prepare($sql_query);
+            //     $st->execute([$id]);
+            // } elseif ($id === 0) {
                 $st = $conn->query($sql_query);
-            }
+            // }
             $arr = [];
             while ($row = $st->fetch(PDO::FETCH_ASSOC)) {
                 array_push($arr,
