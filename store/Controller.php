@@ -9,30 +9,29 @@ class Controller
 {
     public function __construct($table)
     {
-        $this->servername = getenv('SERVE');
-        $this->username = getenv('USERNAME');
-        $this->password = getenv('PASSWORD');
-        $this->dbname = getenv('DB');
-        $this->table = $table;
+        $this->servername = "localhost";
+        $this->username = "root";
+        $this->password = "";
+        $this->dbname = "jobs_app";
+        $this->port = 3307;
     }
-    public function test(Request $req, Response $res){
-        $body = $req->getParams();
-        echo json_decode($body);
+    public function test(Request $req, Response $res)
+    {
+
     }
     public function find(Request $req, Response $res)
     {
         $params = $req->getParams();
         $id = $params["id"];
         //
-        $conn = new mysqli($this->servername, $this->username, $this->password, $this->dbname);
+        $conn = new mysqli($this->servername, $this->username, $this->password, $this->dbname, $this->port);
         // Check connection
         if ($conn->connect_error) {
             die("Connection failed: " . $conn->connect_error);
         }
-        $sql_id = "SELECT * FROM $this->table WHERE id={$id}";
-        $sql_o = "SELECT * FROM $this->table";
+        $sql_id = "SELECT * FROM users WHERE id='{$id}'";
+        $sql_o = "SELECT * FROM users ORDER BY created_at DESC";
         $sql = (isset($id)) ? $sql_id : $sql_o;
-
         $result = $conn->query($sql);
         $arr = [];
         if ($result->num_rows > 0) {
@@ -44,29 +43,38 @@ class Controller
             }
         } else {
             array_push($arr,
-                array("Error" => "No resource with given URL found", "code" => 404, "method"=> $_SERVER['REQUEST_METHOD'], "url" =>  $_SERVER['REQUEST_URI'] )
+                array("Error" => "No resource with given URL found", "code" => 404, "method" => $_SERVER['REQUEST_METHOD'], "url" => $_SERVER['REQUEST_URI'], "_" => $sql)
             );
         }
-        return $arr;
+        echo json_encode($arr);
         $conn->close();
     }
     public function create(Request $req, Response $res)
     {
         $id = randKey();
         $body = $req->getBody();
-        $date = new DateTime("now");
+        $firstname = $body["firstname"];
+        $lastname = $body["lastname"];
+        $email = $body["email"];
+        //   $id = basename($_SERVER['REQUEST_URI']);
+        //  $is_admin = $body["is_admin"];
+        //  $xero = "0";
+        //
+        $date = date("Y-m-d H:i:s");
         // Create connection
-        $conn = new mysqli($this->servername, $this->username, $this->password, $this->dbname);
+        $conn = new mysqli($this->servername, $this->username, $this->password, $this->dbname, $this->port);
+
         // Check connection
         if ($conn->connect_error) {
             die("Connection failed: " . $conn->connect_error);
         }
         //TODO: SQL STATEMENTS
-        $sql = "INSERT INTO $this->table (id ,firstname, lastname, email, is_admin, jobs_posted, created_at, updated_at)
-        VALUES ($id, $body->firstname,  $body->lastname,  $body->email, $body->is_admin, 0, $date->format('U'), $date->format('U'))";
+        //SPLIT CODE USING IF STATEMENTS
+        $sql = "INSERT INTO users (id,firstname,lastname,email)
+         VALUES ('{$id}', '{$firstname}', '{$lastname}', '{$email}')";
 
         if ($conn->query($sql) === true) {
-            echo json_encode(array("Mssg" => "Success", "code" => 200, 'created_at' => date("H:i:s")));
+            echo json_encode(array("mssg" => "Success", "code" => 200, 'created_at' => $date));
         } else {
             echo json_encode(array("mssg" => $conn->error, "code" => 500, "_" => $sql));
         }
@@ -75,43 +83,43 @@ class Controller
     public function update(Request $req, Response $res)
     {
         $body = $req->getBody();
-        $date = new DateTime("now");
+        $date = date('Y-m-d H:i:s');
         $id = basename($_SERVER['REQUEST_URI']);
-        $conn = new mysqli($this->servername, $this->username, $this->password, $this->dbname);
+        $conn = new mysqli($this->servername, $this->username, $this->password, $this->dbname, $this->port);
         // Check connection
         if ($conn->connect_error) {
             die("Connection failed: " . $conn->connect_error);
         }
         //TODO: SQL STATEMENTS
-        $sql = "UPDATE $this->table SET lastname='Doe', updated_at=$date->format('U') WHERE id=$id";
-
+        $sql = "UPDATE users SET firstname='MAKHOSANDILE', updated_at='{$date}' WHERE id='{$id}'";
+    
         if ($conn->query($sql) === true) {
-            echo json_encode(array("Mssg" => "Success", "code" => 200, 'updated_at' => date("H:i:s")));
+            echo json_encode(array("Mssg" => "Success", "code" => 200, "_"=> $sql,'updated_at' => $date, "date"=>$date));
         } else {
-            echo json_encode(array("Error" => $conn->error, "code" => 400, "target_id"=> $id));
+            echo json_encode(array("Error" => $conn->error, "code" => 400, "_"=> $sql,"target_id"=> $id));
         }
         $conn->close();
 
     }
     public function dump(Request $req, Response $res)
     {
-        $body = $req->getBody();
+        $id = basename($_SERVER['REQUEST_URI']);
+        $date = date('Y-m-d H:i:s');
         //
-        $conn = new mysqli($this->servername, $this->username, $this->password, $this->dbname);
-        // Check connection
-        if ($conn->connect_error) {
-            die("Connection failed: " . $conn->connect_error);
-        }
-        //TODO: SQL STATEMENTS
-        $sql = "DELETE FROM $this->table WHERE id=$body->id";
-
-        if ($conn->query($sql) === true) {
-            echo json_encode(array("Mssg" => "Success", "code" => 200, 'deleted_at' => date("H:i:s")));
-        } else {
-            echo json_encode(array("mssg" => $conn->error, "code" => 500, "_" => $sql));
-        }
-
-        $conn->close();
+      $conn = new mysqli($this->servername, $this->username, $this->password, $this->dbname, $this->port);
+      // Check connection
+      if ($conn->connect_error) {
+          die("Connection failed: " . $conn->connect_error);
+      }
+      //TODO: SQL STATEMENTS
+      $sql = "DELETE FROM users WHERE id='{$id}'";
+  
+      if ($conn->query($sql) === true) {
+          echo json_encode(array("Mssg" => "Success", "code" => 200, 'deleted_at' => $date));
+      } else {
+          echo json_encode(array("mssg" => $conn->error, "code" => 500, "_" => $sql));
+      }
+  
+      $conn->close();
     }
 }
-
