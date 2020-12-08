@@ -15,10 +15,10 @@ function interfaceDb($sql_query, $method){
         $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
         $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         /// use exec() because no results are returned
-        if ($method === 100) {
+        if ($method === 'insert') {
             $conn->exec($sql_query);
             echo "Success!!! @ " . date("H:i:s");
-        } elseif ($method === 10) {
+        } elseif ($method === 'select') {
             // if ($id !== 0) {
             //     $st = $conn->prepare($sql_query);
             //     $st->execute([$id]);
@@ -35,7 +35,7 @@ function interfaceDb($sql_query, $method){
         }
         //
     } catch (PDOException $e) {
-        echo ERROR . ": " . $e->getMessage();
+        echo  "ERROR". ": " . $e->getMessage();
     }
     $conn = null;
 }
@@ -60,3 +60,8 @@ function cors(){
     header("Access-Control-Allow-Origin: *");
     header("Access-Control-Allow-Headers: *");
 };
+$servername = "localhost";	
+$username = "root";	
+$password = "";	
+$dbname = "jobs_app";
+$port = 3307;
