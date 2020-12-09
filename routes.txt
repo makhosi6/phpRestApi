@@ -1,30 +1,5 @@
-find => GET http://localhost:9090/user ++
-find => GET => http://localhost:9090/users?id=wateva ++
-create => POST http://localhost:9090/users/ ++
-update => PUT/PATCH http://localhost:9090/users
-dump => DELETE http://localhost:9090/users ++
-
-GET http://localhost:9090/jobs/ ++
-GET http://localhost:9090/jobs?id=wateva ++
-POST http://localhost:9090/jobs ++
-PUT/PATCH http://localhost:9090/jobs
-DELETE http://localhost:9090/jobs ++
 
 
 
-VIA post->body
-    get->params
 
 
-DIVIDE ENTITIES (user, jobs)
-
-code DELETE and PUT
-
-id
-firstname
-lastname
-email
-created_at
-modified_at
-admin_id [foreign key at applications]  as employer
-user_id [foreign key at applications] as employee
