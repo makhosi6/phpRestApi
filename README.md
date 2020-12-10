@@ -5,12 +5,12 @@ No authentication/authorization or any type of Access control has been implement
 ````
 GET  /api/v1/users/list
 GET  /api/v1/users/list?id=0000
-POST  /api/v1/users/0000
+POST  /api/v1/users
 PUT/PATCH /api/v1/users/0000
 DELETE  /api/v1/users/0000
 
 GET  /api/v1/jobs/list
 GET  /api/v1/jobs/list?id=0000
-POST  /api/v1/jobs/0000
+POST  /api/v1/jobs
 PUT/PATCH  /api/v1/jobs/0000
 DELETE  /api/v1/jobs/0000
