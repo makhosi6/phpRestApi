@@ -3,11 +3,12 @@ require "./vendor/autoload.php";
 use ElementaryFramework\WaterPipe\HTTP\Request\Request;
 use ElementaryFramework\WaterPipe\HTTP\Response\Response;
 
-include "../helpers/store.php";
+// include "./helpers/store.php";
+
 
 class Controller
 {
-    public function __construct($table)
+    public function __construct()
     {
         //get from .env
         $this->servername = "localhost";
@@ -16,9 +17,9 @@ class Controller
         $this->dbname = "jobs_app";
         $this->port = 3307;
     }
-    public function test(Request $req, Response $res)
+    public function test()
     {
-
+        echo "TEST";
     }
     public function find(Request $req, Response $res)
     {
@@ -64,7 +65,8 @@ class Controller
     public function create(Request $req, Response $res)
     {
        
-        $id = randKey();
+        // $id = randKey();
+        $id = "random_key";
         $body = $req->getBody();
         $date = date('Y-m-d H:i:s');
         //
@@ -111,6 +113,7 @@ class Controller
     }
     public function update(Request $req, Response $res)
     {
+         //PATCH is the actual method.
         $body = $req->getBody();
         $date = date('Y-m-d H:i:s');
         $conn = new mysqli($this->servername, $this->username, $this->password, $this->dbname, $this->port);
