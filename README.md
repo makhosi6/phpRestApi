@@ -1,3 +1,7 @@
+<p align="center">
+<a alt="thumbnail" href="https://github.com/ElementaryFramework/WaterPipe"><img src="./assets/banner.png" ></a>
+</p>
+
 A minimalistic REST API built in PHP and MySQL. I noticed that nodejs is the go to technology/language to build a simple API. So i started this project as a way of finding out if PHP can be a great tool of bootstrapping a REST API. This project is built on top of [WaterPipe](https://github.com/ElementaryFramework/WaterPipe), a routing framework and request and reponse handler for PHP.
 No authentication/authorization or any type of Access control has been implemented.
 
