@@ -1,4 +1,7 @@
 <?php
+
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__, '..\config\.env');
+$dotenv->load();
 /**
      *Methods.
      *
@@ -7,10 +10,11 @@
      */
 function interfaceDb($sql_query, $method){
     try {
-        $servername = getenv('SERVE');
-        $username = getenv('USERNAME');
-        $password = getenv('PASSWORD');
-        $dbname = getenv('DB');
+        $username = $_ENV['USERNAME'];
+        $servername = $_ENV['SERVER'];
+        $password = $_ENV['PASSWORD'];
+        $dbname = $_ENV['DB'];
+        $port = $_ENV['PORT'];
     // 
         $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
         $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
